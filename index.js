@@ -17,7 +17,19 @@ const languageStrings = {
     'en-GB': {
         translation: {
             FACTS: [
-                'Did i do this.',
+                "A year on Mercury is just 88 days long.",
+                "Despite being farther from the Sun, Venus experiences higher temperatures than Mercury.",
+                "Venus rotates counter-clockwise, possibly because of a collision in the past with an asteroid.",
+                "On Mars, the Sun appears about half the size as it does on Earth.",
+                "Earth is the only planet not named after a god.",
+                "Jupiter has the shortest day of all the planets.",
+                "The Milky Way galaxy will collide with the Andromeda Galaxy in about 5 billion years.",
+                "The Sun contains 99.86% of the mass in the Solar System.",
+                "The Sun is an almost perfect sphere.",
+                "A total solar eclipse can happen once every 1 to 2 years. This makes them a rare event.",
+                "Saturn radiates two and a half times more energy into space than it receives from the sun.",
+                "The temperature inside the Sun can reach 15 million degrees Celsius.",
+                "The Moon is moving approximately 3.8 cm away from our planet every year."
             ],
             SKILL_NAME: 'Space Facts',
             GET_FACT_MESSAGE: "Here's your fact: ",
@@ -59,61 +71,37 @@ const handlers = {
         this.emit(':tellWithCard', speechOutput, this.t('SKILL_NAME'), randomFact);
     },
     
-    
-    'TimesheetUpdateIntent': function () {
-        this.emit('UpdateTimeSheet');
+    'OptionsIntent': function () {
+         this.emit('GetOptions');
+  
+    },
+    'GetOptions': function () {
+        this.response.speak(`You can update your timesheet, see how many people have Overdue Timesheets, take holidays and for fun find interesting facts about space.
+        For timesheet updates say update timesheet
+        To see how many are overdue say overdue
+        To take holidays say holidays
+        For fun facts jsut say tell me a fact`);
+        
+        this.emit(':responseReady')
     },
     
-    'UpdateTimeSheet': function () {
-    //=================================below code can be used to look at an array above and speak the result=====================
-    //     // function called to update time sheet. 
-    //     // Use this.t() to get corresponding language data
-    //     const timesheetArr = this.t('TIMESHEETDATA');
-   
-    //   //============================
-    //     //       // Create speech output
-    // //    this.emit( ':tellWithCard','test'); // will override any other this.emit
-    //   //=========================
-       
-    //     const sheetUpdated = timesheetArr[0];
-
-    //     // Create speech output
-    //     const speechOutput = this.t('GET_TIMESHEET_MESSAGE') + sheetUpdated;
-    //     this.emit(':tellWithCard', speechOutput, this.t('SKILL_NAME'), sheetUpdated);
+        'holidaysIntent': function () {
+        this.emit('Getholidays');
+ 
+    },
     
-    //=============================================================================================================
+    'Getholidays': function () {
+        this.response.speak(`Booking this day next week off`);
+        this.emit(':responseReady')
+    },
     
+    'OverdueTimesheetsIntent': function () {
+         this.emit('GetOverdueTimesheets');
+  
+    },
     
-     //================================the below code GET's data from a web site=============================================
-    //  //https://atlas.version1.com/timesheets/details/B-41988/2017/51/week-view
-    //     var options = {
-    //       host: 'atlas.version1.com',
-    //       port: 80,
-    //       method: 'GET',
-    //       path: '/timesheets/details/B-41988/2017/51/week-view'
-    //     }
-
-    //     var req = http.request(options, res => {
-    //         res.setEncoding('utf8');
-    //         var returnData = "";
-
-    //         res.on('data', chunk => {
-    //             returnData = returnData + chunk;
-    //         });
-
-    //         res.on('end', () => {
-    //           var result = JSON.parse(returnData);
-
-    //           //callback(result);
-    //          // this.response.speak(`Hello there are ${result.dayToShow.length} `);
-
-    //          this.emit(':responseReady');
-    //         });
-
-    //     });
-    //     req.end();
-//---------------------------------------------------------
-      //http://api.open-notify.org/astros.json
+    'GetOverdueTimesheets': function () {
+        //http://api.open-notify.org/astros.json
         var options = {
           host: 'api.open-notify.org',
           port: 80,
@@ -122,26 +110,36 @@ const handlers = {
         }
 
         var req = http.request(options, res => {
-            res.setEncoding('utf8');
-            var returnData = "";
+        res.setEncoding('utf8');
+        var returnData = "";
 
-            res.on('data', chunk => {
-                returnData = returnData + chunk;
-            });
+        res.on('data', chunk => {
+        returnData = returnData + chunk;
+        });
 
             res.on('end', () => {
-              var result = JSON.parse(returnData);
+            var result = JSON.parse(returnData);
 
-              //callback(result);
-              this.response.speak(`Hello, there are ${result.people.length} people who need to update there timesheets.`);
-
-             this.emit(':responseReady');
-            });
-
+            this.response.speak(`Hello, there are ${result.people.length} people with Overdue Timesheets.`);
+            this.emit(':responseReady');
         });
-        req.end();
-     //=============================================================================================================
+
+    });
+    req.end();
+        
+    },
     
+        
+
+    
+    'TimesheetUpdateIntent': function () {
+        this.emit('SetTimeSheet');
+ 
+    },
+    
+    'SetTimeSheet': function () {
+        this.response.speak(`Updating timesheet,        timesheet updated.`);
+        this.emit(':responseReady')
     },
     
 
@@ -167,3 +165,4 @@ exports.handler = function (event, context) {
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
+
