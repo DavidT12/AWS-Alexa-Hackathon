@@ -4,7 +4,7 @@
 
 'use strict';
 
-var http = require("http"); // need this to GET, PUT
+var http = require("http");
 
 
 const Alexa = require('alexa-sdk');
@@ -17,23 +17,23 @@ const languageStrings = {
     'en-GB': {
         translation: {
             FACTS: [
-                "A year on Mercury is just 88 days long.",
-                "Despite being farther from the Sun, Venus experiences higher temperatures than Mercury.",
-                "Venus rotates counter-clockwise, possibly because of a collision in the past with an asteroid.",
-                "On Mars, the Sun appears about half the size as it does on Earth.",
-                "Earth is the only planet not named after a god.",
-                "Jupiter has the shortest day of all the planets.",
-                "The Milky Way galaxy will collide with the Andromeda Galaxy in about 5 billion years.",
-                "The Sun contains 99.86% of the mass in the Solar System.",
-                "The Sun is an almost perfect sphere.",
-                "A total solar eclipse can happen once every 1 to 2 years. This makes them a rare event.",
-                "Saturn radiates two and a half times more energy into space than it receives from the sun.",
-                "The temperature inside the Sun can reach 15 million degrees Celsius.",
-                "The Moon is moving approximately 3.8 cm away from our planet every year."
+                "As of January 2015, there were over 500 different types of cryptocurrencies – or altcoins – for trade in online markets.",
+                "As of September 2017, there were over 1,100 cryptocurrencies and the total market capitalization of all cryptocurrencies reached an all-time high surpassing $60 billion!",
+                "Every day produces about 3,600 new Bitcoins.",
+                "The first transfer Bitcoin transaction took place on January 21, 2009. ",
+                "The maximum amount of Bitcoins that will be produced - 21 million coins. Today already produced about 12 million bitcoins. ",
+                "Only 36% of the total volume of coins produced have been observed in any transaction. The remaining 64% of the coins after his appearance were never used.",
+                "A resident of the UK named James Houels inadvertently threw a hard drive with a key from the wallet, which was (and probably still is) 7500 Bitcoins. It is about 5 million dollars at the current rate.",
+                "When the pressure states cut off WikiLeaks donations via bank transfer, the site instantly switched to receive donations in Bitcoins.",
+                "The guy from Norway named Christopher Koch, bought the Bitcoins in the year 2009 at $ 27 and forgotten about them, and when he remembered, his investment has risen to 886 thousand dollars.",
+                "The first Bitcoin-ATM was installed in the Canadian city of Vancouver.",
+                "Thailand was the first country in the world to ban Bitcoin (but allowed back).",
+                "927 people own 50% of all Bitcoin.",
+                "The cryptocurrency industry currently employs more than 1,876 people."
             ],
-            SKILL_NAME: 'Space Facts',
+            SKILL_NAME: 'Crypto Facts',
             GET_FACT_MESSAGE: "Here's your fact: ",
-            HELP_MESSAGE: 'You can say tell me a space fact, or, you can say exit... What can I help you with?',
+            HELP_MESSAGE: 'You can say tell me a fact, or, you can say exit... What can I help you with?',
             HELP_REPROMPT: 'What can I help you with?',
             STOP_MESSAGE: 'Goodbye!',
     
@@ -60,7 +60,7 @@ const handlers = {
         this.emit('GetFact');
     },
     'GetFact': function () {
-        // Get a random space fact from the space facts list
+        // Get a random crypto fact from the crypto facts list
         // Use this.t() to get corresponding language data
         const factArr = this.t('FACTS');
         const factIndex = Math.floor(Math.random() * factArr.length);
@@ -85,7 +85,7 @@ const handlers = {
         this.emit(':responseReady')
     },
     
-        'holidaysIntent': function () {
+    'holidaysIntent': function () {
         this.emit('Getholidays');
  
     },
@@ -95,18 +95,20 @@ const handlers = {
         this.emit(':responseReady')
     },
     
-    'OverdueTimesheetsIntent': function () {
-         this.emit('GetOverdueTimesheets');
+    'BitcoinValueIntent': function () {
+         this.emit('GetBitcoinValue');
+         //this.emit('GetDogecoinValue'); //needs more work
+
   
     },
     
-    'GetOverdueTimesheets': function () {
-        //http://api.open-notify.org/astros.json
+    'GetBitcoinValue': function () {
+        //http://api.coindesk.com//v1/bpi/currentprice/EUR.json
         var options = {
-          host: 'api.open-notify.org',
+          host: 'api.coindesk.com',
           port: 80,
           method: 'GET',
-          path: '/astros.json'
+          path: '/v1/bpi/currentprice/EUR.json'
         }
 
         var req = http.request(options, res => {
@@ -119,8 +121,9 @@ const handlers = {
 
             res.on('end', () => {
             var result = JSON.parse(returnData);
-
-            this.response.speak(`Hello, there are ${result.people.length} people with Overdue Timesheets.`);
+            var btcValueRounded = parseFloat(`${result.bpi.EUR.rate_float}`).toFixed(2);
+            
+            this.response.speak(`The value of bitcoin in ${result.bpi.EUR.description} as of ${result.time.updateduk} is ${btcValueRounded}`);
             this.emit(':responseReady');
         });
 
@@ -128,8 +131,47 @@ const handlers = {
     req.end();
         
     },
-    
+    'DogecoinValueIntent': function () {
         
+         this.emit('GetDogecoinValue'); //needs more work
+
+  
+    },
+
+ 
+    
+    'GetDogecoinValue': function () {
+        //https://api.coinmarketcap.com/v1/ticker/dogecoin/
+        //http://api.coindesk.com//v1/bpi/currentprice/EUR.json
+        //https://min-api.cryptocompare.com/data/price?fsym=DOGE&tsyms=EUR
+        var options = {
+          host: 'api.coinmarketcap.com',
+          port: 80,
+          method: 'GET',
+          path: '/v1/ticker/dogecoin/'
+        }
+
+        var req = http.request(options, res => {
+        res.setEncoding('utf8');
+        var returnData = "";
+
+        res.on('data', chunk => {
+        returnData = returnData + chunk;
+        });
+
+            res.on('end', () => {
+            var result = JSON.parse(returnData);
+            this.response.speak(`The value of Dogecoin in usd as is ${result.id}`);
+            this.emit(':responseReady');
+        });
+
+    });
+    req.end();
+
+  
+    },
+    
+    
 
     
     'TimesheetUpdateIntent': function () {
