@@ -34,8 +34,45 @@
         "slots": []
       },
       {
+        "name": "holidaysIntent",
+        "samples": [
+          "take time off",
+          "time off",
+          "holidays",
+          "book time off"
+        ],
+        "slots": []
+      },
+      {
+        "name": "OptionsIntent",
+        "samples": [
+          "options",
+          "What are the options",
+          "what options",
+          "help",
+          "help please",
+          "what can i do"
+        ],
+        "slots": []
+      },
+      {
+        "name": "OverdueTimesheetsIntent",
+        "samples": [
+          "Overdue Timesheets",
+          "overdue",
+          "is there any overdue",
+          "is there any overdue timesheets"
+        ],
+        "slots": []
+      },
+      {
         "name": "TimesheetUpdateIntent",
         "samples": [
+          "Update Timesheet",
+          "Update todays timesheet",
+          "add me in for today",
+          "Update",
+          "update timesheet",
           "update"
         ],
         "slots": []
