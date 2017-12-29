@@ -14,20 +14,32 @@
         "samples": []
       },
       {
+        "name": "BitcoinValueIntent",
+        "samples": [
+          "value of bitcoin",
+          "value",
+          "value of",
+          "bitcoin price"
+        ],
+        "slots": []
+      },
+      {
+        "name": "DogecoinValueIntent",
+        "samples": [
+          "value of Dogecoin",
+          "dogecoin"
+        ],
+        "slots": []
+      },
+      {
         "name": "GetNewFactIntent",
         "samples": [
           "a fact",
-          "a space fact",
           "tell me a fact",
-          "tell me a space fact",
           "give me a fact",
-          "give me a space fact",
           "tell me trivia",
-          "tell me a space trivia",
           "give me trivia",
-          "give me a space trivia",
           "give me some information",
-          "give me some space information",
           "tell me something",
           "give me something"
         ],
@@ -52,16 +64,6 @@
           "help",
           "help please",
           "what can i do"
-        ],
-        "slots": []
-      },
-      {
-        "name": "OverdueTimesheetsIntent",
-        "samples": [
-          "Overdue Timesheets",
-          "overdue",
-          "is there any overdue",
-          "is there any overdue timesheets"
         ],
         "slots": []
       },
