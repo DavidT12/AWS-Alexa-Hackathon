@@ -5,7 +5,7 @@
 'use strict';
 
 var http = require("http");
-
+const https = require('https');
 
 const Alexa = require('alexa-sdk');
 
@@ -37,14 +37,6 @@ const languageStrings = {
             HELP_REPROMPT: 'What can I help you with?',
             STOP_MESSAGE: 'Goodbye!',
     
-            TIMESHEETDATA: [
-            'Timesheet updated.',
-            ],
-            SKILL_NAME: 'Timesheet Update',
-            GET_TIMESHEET_MESSAGE: "trying to update time sheet: ",
-            HELP_MESSAGE: 'You can say tell me a space fact, or, you can say exit... What can I help you with?',
-            HELP_REPROMPT: 'What can I help you with?',
-            STOP_MESSAGE: 'Goodbye!',
         },
     },
 
@@ -71,35 +63,8 @@ const handlers = {
         this.emit(':tellWithCard', speechOutput, this.t('SKILL_NAME'), randomFact);
     },
     
-    'OptionsIntent': function () {
-         this.emit('GetOptions');
-  
-    },
-    'GetOptions': function () {
-        this.response.speak(`You can update your timesheet, see how many people have Overdue Timesheets, take holidays and for fun find interesting facts about space.
-        For timesheet updates say update timesheet
-        To see how many are overdue say overdue
-        To take holidays say holidays
-        For fun facts jsut say tell me a fact`);
-        
-        this.emit(':responseReady')
-    },
-    
-    'holidaysIntent': function () {
-        this.emit('Getholidays');
- 
-    },
-    
-    'Getholidays': function () {
-        this.response.speak(`Booking this day next week off`);
-        this.emit(':responseReady')
-    },
-    
     'BitcoinValueIntent': function () {
          this.emit('GetBitcoinValue');
-         //this.emit('GetDogecoinValue'); //needs more work
-
-  
     },
     
     'GetBitcoinValue': function () {
@@ -109,7 +74,7 @@ const handlers = {
           port: 80,
           method: 'GET',
           path: '/v1/bpi/currentprice/EUR.json'
-        }
+        };
 
         var req = http.request(options, res => {
         res.setEncoding('utf8');
@@ -131,27 +96,59 @@ const handlers = {
     req.end();
         
     },
+    
     'DogecoinValueIntent': function () {
-        
-         this.emit('GetDogecoinValue'); //needs more work
-
-  
+         this.emit('GetDogecoinValue');
+         
     },
-
- 
     
     'GetDogecoinValue': function () {
-        //https://api.coinmarketcap.com/v1/ticker/dogecoin/
-        //http://api.coindesk.com//v1/bpi/currentprice/EUR.json
         //https://min-api.cryptocompare.com/data/price?fsym=DOGE&tsyms=EUR
         var options = {
-          host: 'api.coinmarketcap.com',
-          port: 80,
+          host: 'min-api.cryptocompare.com',
+          port: 443,
           method: 'GET',
-          path: '/v1/ticker/dogecoin/'
-        }
+          path: '/data/price?fsym=DOGE&tsyms=EUR'
+        };
 
-        var req = http.request(options, res => {
+        var req = https.request(options, res => {
+        res.setEncoding('utf8');
+        var returnData = "";
+
+        res.on('data', chunk => {
+        returnData = returnData + chunk;
+        });
+
+
+
+            res.on('end', () => {
+            if(returnData!=null){    
+                var result = JSON.parse(returnData);
+                var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
+                this.response.speak(`The value of Dogecoin in euro is ${ValueRounded}  `);
+                this.emit(':responseReady');
+           } 
+        });
+
+    });
+    req.end();
+    },
+    
+    
+    'EthcoinValueIntent': function () {
+         this.emit('GetEthcoinValue'); 
+    },
+    
+    'GetEthcoinValue': function () {
+        //https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=EUR
+        var options = {
+          host: 'min-api.cryptocompare.com',
+          port: 443,
+          method: 'GET',
+          path: '/data/price?fsym=ETH&tsyms=EUR'
+        };
+
+        var req = https.request(options, res => {
         res.setEncoding('utf8');
         var returnData = "";
 
@@ -160,29 +157,128 @@ const handlers = {
         });
 
             res.on('end', () => {
-            var result = JSON.parse(returnData);
-            this.response.speak(`The value of Dogecoin in usd as is ${result.id}`);
-            this.emit(':responseReady');
+            if(returnData!=null){    
+                var result = JSON.parse(returnData);
+                var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
+                this.response.speak(`The value of Ethcoin in euro is ${ValueRounded}  `);
+                this.emit(':responseReady');
+           } 
+        });
+    });
+    req.end();
+    },
+    
+    
+    'IotcoinValueIntent': function () {
+         this.emit('GetIotcoinValue'); 
+    },
+    
+    'GetIotcoinValue': function () {
+        //https://min-api.cryptocompare.com/data/price?fsym=IOT&tsyms=EUR 
+        var options = {
+          host: 'min-api.cryptocompare.com',
+          port: 443,
+          method: 'GET',
+          path: '/data/price?fsym=IOT&tsyms=EUR'
+        };
+
+        var req = https.request(options, res => {
+        res.setEncoding('utf8');
+        var returnData = "";
+
+        res.on('data', chunk => {
+        returnData = returnData + chunk;
+        });
+
+            res.on('end', () => {
+            if(returnData!=null){    
+                var result = JSON.parse(returnData);
+                var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
+                this.response.speak(`The value of Iotcoin in euro is ${ValueRounded}  `);
+                this.emit(':responseReady');
+           } 
+        });
+    });
+    req.end();
+    },
+    
+    
+    'NeocoinValueIntent': function () {
+         this.emit('GetNeocoinValue'); 
+    },
+    
+    'GetNeocoinValue': function () {
+        //https://min-api.cryptocompare.com/data/price?fsym=NEO&tsyms=EUR
+        var options = {
+          host: 'min-api.cryptocompare.com',
+          port: 443,
+          method: 'GET',
+          path: '/data/price?fsym=NEO&tsyms=EUR'
+        };
+
+        var req = https.request(options, res => {
+        res.setEncoding('utf8');
+        var returnData = "";
+
+        res.on('data', chunk => {
+        returnData = returnData + chunk;
+        });
+
+            res.on('end', () => {
+            if(returnData!=null){    
+                var result = JSON.parse(returnData);
+                var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
+                this.response.speak(`The value of Neocoin in euro is ${ValueRounded}  `);
+                this.emit(':responseReady');
+           } 
+        });
+    });
+    req.end();
+    },
+    
+    
+
+    'TopFiveCryptocurrenciesValueIntent': function () {
+         this.emit('GetTopFiveCryptocurrenciesValue');
+         
+    },
+    
+    'GetTopFiveCryptocurrenciesValue': function () {
+        //https://min-api.cryptocompare.com/data/price?fsym=DOGE&tsyms=EUR
+        var options = {
+          host: 'min-api.cryptocompare.com',
+          port: 443,
+          method: 'GET',
+          path: '/data/price?fsym=DOGE&tsyms=EUR'
+        };
+
+        var req = https.request(options, res => {
+        res.setEncoding('utf8');
+        var returnData = "";
+
+        res.on('data', chunk => {
+        returnData = returnData + chunk;
+        });
+
+
+
+            res.on('end', () => {
+            if(returnData!=null){    
+                var result = JSON.parse(returnData);
+                var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
+                this.response.speak(`five in euro is ${ValueRounded}  `);
+                this.emit(':responseReady');
+           } 
         });
 
     });
     req.end();
+    },
 
-  
-    },
-    
-    
 
-    
-    'TimesheetUpdateIntent': function () {
-        this.emit('SetTimeSheet');
- 
-    },
-    
-    'SetTimeSheet': function () {
-        this.response.speak(`Updating timesheet,        timesheet updated.`);
-        this.emit(':responseReady')
-    },
+
+
+
     
 
     
@@ -207,4 +303,3 @@ exports.handler = function (event, context) {
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
-

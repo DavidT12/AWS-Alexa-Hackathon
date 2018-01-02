@@ -1,5 +1,40 @@
 {
   "languageModel": {
+    "types": [
+      {
+        "name": "fsym",
+        "values": [
+          {
+            "id": null,
+            "name": {
+              "value": "DOGE",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "NEO",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "IOT",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "ETH",
+              "synonyms": []
+            }
+          }
+        ]
+      }
+    ],
     "intents": [
       {
         "name": "AMAZON.CancelIntent",
@@ -32,6 +67,14 @@
         "slots": []
       },
       {
+        "name": "EthcoinValueIntent",
+        "samples": [
+          "value of Ethcoin",
+          "ethcoin"
+        ],
+        "slots": []
+      },
+      {
         "name": "GetNewFactIntent",
         "samples": [
           "a fact",
@@ -46,39 +89,22 @@
         "slots": []
       },
       {
-        "name": "holidaysIntent",
+        "name": "IotcoinValueIntent",
         "samples": [
-          "take time off",
-          "time off",
-          "holidays",
-          "book time off"
+          "value of Iotcoin",
+          "iotcoin"
         ],
         "slots": []
       },
       {
-        "name": "OptionsIntent",
+        "name": "NeocoinValueIntent",
         "samples": [
-          "options",
-          "What are the options",
-          "what options",
-          "help",
-          "help please",
-          "what can i do"
-        ],
-        "slots": []
-      },
-      {
-        "name": "TimesheetUpdateIntent",
-        "samples": [
-          "Update Timesheet",
-          "Update todays timesheet",
-          "add me in for today",
-          "Update",
-          "update timesheet",
-          "update"
+          "value of Neocoin",
+          "neocoin"
         ],
         "slots": []
       }
+      
     ],
     "invocationName": "timesheet"
   }
