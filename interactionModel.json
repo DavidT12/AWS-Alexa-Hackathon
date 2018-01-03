@@ -2,19 +2,12 @@
   "languageModel": {
     "types": [
       {
-        "name": "fsym",
+        "name": "LIST_OF_LANGUAGES",
         "values": [
           {
             "id": null,
             "name": {
               "value": "DOGE",
-              "synonyms": []
-            }
-          },
-          {
-            "id": null,
-            "name": {
-              "value": "NEO",
               "synonyms": []
             }
           },
@@ -28,7 +21,7 @@
           {
             "id": null,
             "name": {
-              "value": "ETH",
+              "value": "BIT",
               "synonyms": []
             }
           }
@@ -103,8 +96,23 @@
           "neocoin"
         ],
         "slots": []
+      },
+      {
+        "name": "TopFiveCryptocurrenciesValueIntent",
+        "samples": [
+          "Top five",
+          "five",
+          "{cryptocurrency}",
+          "my langauge is {cryptocurrency}",
+          "Say anything but must say {cryptocurrency} somewhere in your speech"
+        ],
+        "slots": [
+          {
+            "name": "cryptocurrency",
+            "type": "LIST_OF_LANGUAGES"
+          }
+        ]
       }
-      
     ],
     "invocationName": "timesheet"
   }
