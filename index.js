@@ -244,15 +244,13 @@ const handlers = {
     },
     
     'GetTopFiveCryptocurrenciesValue': function () {
-        var finaloutput;
-         var cryptocurrency = this.event.request.intent.slots.cryptocurrency.value;
+       // var finaloutput;
+        var cryptocurrency = this.event.request.intent.slots.cryptocurrency.value;
         var thepath="/data/price?fsym=" +cryptocurrency.toUpperCase() + "&tsyms=EUR";
         
-       // var test1= '/data/price?fsym=DOGE&tsyms=EUR';
         
         //https://min-api.cryptocompare.com/data/price?fsym=DOGE&tsyms=EUR
-        
-       
+        //also see https://min-api.cryptocompare.com/data/all/coinlist
         var options = {
           host: 'min-api.cryptocompare.com',
           port: 443,
@@ -274,9 +272,11 @@ const handlers = {
             if(returnData!=null){    
                 var result = JSON.parse(returnData);
                 var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
-                finaloutput=" in euro is  " + ValueRounded;
-      //          this.response.speak(cryptocurrency + " in euro is  " + ValueRounded);
-       //         this.emit(':responseReady');
+             
+
+            this.response.speak(cryptocurrency.toUpperCase() + " in euro is  " + ValueRounded);
+            this.emit(':responseReady');
+       
           } 
         });
 
@@ -285,44 +285,45 @@ const handlers = {
     
     
     //==================================
-    // https://min-api.cryptocompare.com/data/all/coinlist
-     var optionssecondpage = {
-          host: 'min-api.cryptocompare.com',
-          port: 443,
-          method: 'GET',
-          path: '/data/all/coinlist'
-        };
+    // // https://min-api.cryptocompare.com/data/all/coinlist
+    //  var optionssecondpage = {
+    //       host: 'min-api.cryptocompare.com',
+    //       port: 443,
+    //       method: 'GET',
+    //       path: '/data/all/coinlist'
+    //     };
 
-        var reqs = https.request(optionssecondpage, res => {
-        res.setEncoding('utf8');
-        var returnData = "";
+    //     var reqs = https.request(optionssecondpage, res => {
+    //     res.setEncoding('utf8');
+    //     var returnData = "";
 
-        res.on('data', chunk => {
-        returnData = returnData + chunk;
-        });
+    //     res.on('data', chunk => {
+    //     returnData = returnData + chunk;
+    //     });
 
 
 
-            res.on('end', () => {
+    //         res.on('end', () => {
   
-                var result = JSON.parse(returnData);
-                 result= result.Data;
-                 var name="BTC";
-                 result=result.name;
-              //  result.Data.BTC.CoinName 
+    //             var result = JSON.parse(returnData);
+    //              result= result.Data;
+    //              var name="BTC";
+    //              result=result.name;
+    //           //  result.Data.BTC.CoinName 
               
-                //var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
-                this.response.speak(name + "  " + finaloutput);
+     
+                
+    //             // this.response.speak(name + "  " + finaloutput);
          
-                this.emit(':responseReady');
-        });
+    //             // this.emit(':responseReady');
+    //     });
 
-    });
-    reqs.end();
+    // });
+    // reqs.end();
     
     
    
-    //this.emit(':tell', "Your language is " + cryptocurrency);
+
     },
 
 
