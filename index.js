@@ -119,8 +119,6 @@ const handlers = {
         returnData = returnData + chunk;
         });
 
-
-
             res.on('end', () => {
             if(returnData!=null){    
                 var result = JSON.parse(returnData);
@@ -238,18 +236,23 @@ const handlers = {
     
     
 
-    'TopFiveCryptocurrenciesValueIntent': function () {
-         this.emit('GetTopFiveCryptocurrenciesValue');
+    'CryptocurrenciesValueIntent': function () {
+         this.emit('GetCryptocurrenciesValue');
          
     },
     
-    'GetTopFiveCryptocurrenciesValue': function () {
+    'GetCryptocurrenciesValue': function () {
+        var cryptocurrency = this.event.request.intent.slots.cryptocurrency.value;
+        var thepath="/data/price?fsym=" +cryptocurrency.toUpperCase() + "&tsyms=EUR";
+        
+        
         //https://min-api.cryptocompare.com/data/price?fsym=DOGE&tsyms=EUR
+        //also see https://min-api.cryptocompare.com/data/all/coinlist
         var options = {
           host: 'min-api.cryptocompare.com',
           port: 443,
           method: 'GET',
-          path: '/data/price?fsym=DOGE&tsyms=EUR'
+          path: thepath
         };
 
         var req = https.request(options, res => {
@@ -260,26 +263,20 @@ const handlers = {
         returnData = returnData + chunk;
         });
 
-
-
             res.on('end', () => {
             if(returnData!=null){    
                 var result = JSON.parse(returnData);
                 var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
-                this.response.speak(`five in euro is ${ValueRounded}  `);
-                this.emit(':responseReady');
-           } 
+             
+            this.response.speak(cryptocurrency.toUpperCase() + " in euro is " + ValueRounded);
+            this.emit(':responseReady');
+       
+          } 
         });
 
     });
     req.end();
     },
-
-
-
-
-
-    
 
     
     'AMAZON.HelpIntent': function () {
