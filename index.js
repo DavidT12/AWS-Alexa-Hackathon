@@ -119,8 +119,6 @@ const handlers = {
         returnData = returnData + chunk;
         });
 
-
-
             res.on('end', () => {
             if(returnData!=null){    
                 var result = JSON.parse(returnData);
@@ -238,13 +236,12 @@ const handlers = {
     
     
 
-    'TopFiveCryptocurrenciesValueIntent': function () {
-         this.emit('GetTopFiveCryptocurrenciesValue');
+    'CryptocurrenciesValueIntent': function () {
+         this.emit('GetCryptocurrenciesValue');
          
     },
     
-    'GetTopFiveCryptocurrenciesValue': function () {
-       // var finaloutput;
+    'GetCryptocurrenciesValue': function () {
         var cryptocurrency = this.event.request.intent.slots.cryptocurrency.value;
         var thepath="/data/price?fsym=" +cryptocurrency.toUpperCase() + "&tsyms=EUR";
         
@@ -266,15 +263,12 @@ const handlers = {
         returnData = returnData + chunk;
         });
 
-
-
             res.on('end', () => {
             if(returnData!=null){    
                 var result = JSON.parse(returnData);
                 var ValueRounded = parseFloat(`${result.EUR}`).toFixed(2);
              
-
-            this.response.speak(cryptocurrency.toUpperCase() + " in euro is  " + ValueRounded);
+            this.response.speak(cryptocurrency.toUpperCase() + " in euro is " + ValueRounded);
             this.emit(':responseReady');
        
           } 
@@ -282,55 +276,7 @@ const handlers = {
 
     });
     req.end();
-    
-    
-    //==================================
-    // // https://min-api.cryptocompare.com/data/all/coinlist
-    //  var optionssecondpage = {
-    //       host: 'min-api.cryptocompare.com',
-    //       port: 443,
-    //       method: 'GET',
-    //       path: '/data/all/coinlist'
-    //     };
-
-    //     var reqs = https.request(optionssecondpage, res => {
-    //     res.setEncoding('utf8');
-    //     var returnData = "";
-
-    //     res.on('data', chunk => {
-    //     returnData = returnData + chunk;
-    //     });
-
-
-
-    //         res.on('end', () => {
-  
-    //             var result = JSON.parse(returnData);
-    //              result= result.Data;
-    //              var name="BTC";
-    //              result=result.name;
-    //           //  result.Data.BTC.CoinName 
-              
-     
-                
-    //             // this.response.speak(name + "  " + finaloutput);
-         
-    //             // this.emit(':responseReady');
-    //     });
-
-    // });
-    // reqs.end();
-    
-    
-   
-
     },
-
-
-
-
-
-    
 
     
     'AMAZON.HelpIntent': function () {
